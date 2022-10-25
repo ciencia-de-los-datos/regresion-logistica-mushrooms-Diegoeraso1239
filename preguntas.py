@@ -60,85 +60,85 @@ import pandas as pd
 
 
 def pregunta_01():
-  df = pd.read_csv('mushrooms.csv')
-  df.drop(inplace= True, labels = 'veil_type', axis =1)
-  y = df['type'] 
-  X = df.copy()
-  X.drop('type', axis = 1, inplace = True)
-  return X, y
+     df = pd.read_csv('mushrooms.csv')
+     df.drop(inplace= True, labels = 'veil_type', axis =1)
+     y = df['type'] 
+     X = df.copy()
+     X.drop('type', axis = 1, inplace = True)
+     return X, y
 
 
 def pregunta_02():
-    """
-    Preparación del dataset.
-    """
+     """
+     Preparación del dataset.
+     """
 
-    # Importe train_test_split
-    from sklearn.model_selection import train_test_split
+     # Importe train_test_split
+     from sklearn.model_selection import train_test_split
 
-    # Cargue los datos de ejemplo y asigne los resultados a `X` y `y`.
-    X, y = pregunta_01()
+     # Cargue los datos de ejemplo y asigne los resultados a `X` y `y`.
+     X, y = pregunta_01()
 
-    # Divida los datos de entrenamiento y prueba. La semilla del generador de números
-    # aleatorios es 123. Use 50 patrones para la muestra de prueba.
+     # Divida los datos de entrenamiento y prueba. La semilla del generador de números
+     # aleatorios es 123. Use 50 patrones para la muestra de prueba.
      X_train, X_test, y_train, y_test, =  train_test_split(
-                                                           X,
-                                                           y,
-                                                           test_size = 50,
-                                                           random_state = 123,
+                                                 X,
+                                                 y,
+                                                 test_size = 50,
+                                                 random_state = 123,
      )
 
-    # Retorne `X_train`, `X_test`, `y_train` y `y_test`
-    return X_train, X_test, y_train, y_test
+     # Retorne `X_train`, `X_test`, `y_train` y `y_test`
+     return X_train, X_test, y_train, y_test
 
 
 def pregunta_03():
-    """
-    Especificación y entrenamiento del modelo. En sklearn, el modelo de regresión
-    logística (a diferencia del modelo implementado normalmente en estadística) tiene
-    un hiperparámetro de regularición llamado `Cs`. Consulte la documentación.
+     """
+     Especificación y entrenamiento del modelo. En sklearn, el modelo de regresión
+     logística (a diferencia del modelo implementado normalmente en estadística) tiene
+     un hiperparámetro de regularición llamado `Cs`. Consulte la documentación.
 
-    Para encontrar el valor óptimo de Cs se puede usar LogisticRegressionCV.
+     Para encontrar el valor óptimo de Cs se puede usar LogisticRegressionCV.
 
-    Ya que las variables explicativas son literales, resulta más conveniente usar un
-    pipeline.
-    """
+     Ya que las variables explicativas son literales, resulta más conveniente usar un
+     pipeline.
+     """
 
      from sklearn.linear_model import LogisticRegressionCV
      from sklearn.preprocessing import OneHotEncoder
      from sklearn.pipeline import Pipeline
-    # Cargue las variables.
+     # Cargue las variables.
      X_train, _, y_train, _ = pregunta_02()
-     
 
-    # Cree un pipeline que contenga un estimador OneHotEncoder y un estimador
-    # LogisticRegression con una regularización Cs=10
+
+     # Cree un pipeline que contenga un estimador OneHotEncoder y un estimador
+     # LogisticRegression con una regularización Cs=10
      pipeline = Pipeline(
       steps = [('oneHotEncoder', OneHotEncoder()),
               ('logisticRegressionCV', LogisticRegressionCV(Cs=10))
               ],
      )
-    # Entrene el pipeline con los datos de entrenamiento.
+     # Entrene el pipeline con los datos de entrenamiento.
      pipeline.fit(X_train,y_train)
-    # Retorne el pipeline entrenado
+     # Retorne el pipeline entrenado
      return pipeline
 
 
 def pregunta_04():
-    """
-    Evalue el modelo obtenido.
-    """
+     """
+     Evalue el modelo obtenido.
+     """
 
-    # Importe confusion_matrix
+     # Importe confusion_matrix
      from sklearn.metrics import confusion_matrix
 
-    # Obtenga el pipeline de la pregunta 3.
+     # Obtenga el pipeline de la pregunta 3.
       pipeline = pregunta_03()
 
-    # Cargue las variables.
+     # Cargue las variables.
       X_train, X_test, y_train, y_test = pregunta_02()
 
-    # Evalúe el pipeline con los datos de entrenamiento usando la matriz de confusion.
+     # Evalúe el pipeline con los datos de entrenamiento usando la matriz de confusion.
 
      cfm_train = confusion_matrix(
          y_true = y_train,
@@ -151,5 +151,5 @@ def pregunta_04():
      )
 
 
-    # Retorne la matriz de confusion de entrenamiento y prueba
-    return cfm_train, cfm_test
+     # Retorne la matriz de confusion de entrenamiento y prueba
+     return cfm_train, cfm_test
